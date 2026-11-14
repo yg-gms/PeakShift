@@ -1,0 +1,62 @@
+{
+  "validation": {
+    "days": 110,
+    "hours": 2640,
+    "skipped_days": 0,
+    "skipped_dates": [],
+    "baseline_hourly_mae_kw": 0.5638738636363636,
+    "model_hourly_mae_kw": 0.45253030303030306,
+    "baseline_peak_mae_kw": 2.998245454545454,
+    "model_peak_mae_kw": 2.4872363636363635,
+    "model_vs_original": {
+      "better": 57,
+      "equal": 51,
+      "worse": 2
+    },
+    "model_vs_baseline": {
+      "better": 20,
+      "equal": 89,
+      "worse": 1
+    },
+    "average_simulated_peak_kw": {
+      "Original": 5.194254545454546,
+      "Baseline": 4.893627272727272,
+      "Model": 4.7146
+    }
+  },
+  "test": {
+    "days": 109,
+    "hours": 2616,
+    "skipped_days": 1,
+    "skipped_dates": [
+      "2024-10-27"
+    ],
+    "baseline_hourly_mae_kw": 0.8071953363914374,
+    "model_hourly_mae_kw": 0.7805363149847094,
+    "baseline_peak_mae_kw": 2.2715321100917434,
+    "model_peak_mae_kw": 2.604032110091743,
+    "model_vs_original": {
+      "better": 1,
+      "equal": 108,
+      "worse": 0
+    },
+    "model_vs_baseline": {
+      "better": 0,
+      "equal": 109,
+      "worse": 0
+    },
+    "average_simulated_peak_kw": {
+      "Original": 12.145293577981654,
+      "Baseline": 12.140972477064222,
+      "Model": 12.140972477064222
+    }
+  },
+  "model": {
+    "meter_id": 133930,
+    "criterion": "absolute_error",
+    "max_depth": 5,
+    "random_state": 42
+  },
+  "validation_start": "2024-05-26 00:00:00+02:00",
+  "test_start": "2024-09-13 00:00:00+02:00"
+}

@@ -1,6 +1,9 @@
 from explore import DATA_FOLDER, METER_ID, load_hourly
 from sklearn.tree import DecisionTreeRegressor
 import matplotlib.pyplot as plt
+from pathlib import Path
+import json
+from evaluation import evaluate_period
 from scheduler import choose_start
 
 hourly = load_hourly(
@@ -38,32 +41,45 @@ model = DecisionTreeRegressor(
 )
 model.fit(train[features], train["mean"])
 
-predictions = model.predict(validation[features])
+results_folder = Path(__file__).resolve().parent / "results"
+results_folder.mkdir(exist_ok=True)
+report = {}
 
-model_mae = (validation["mean"] - predictions).abs().mean()
-baseline_mae = (
-    validation["mean"] - validation["yesterday"]
-).abs().mean()
+for name, period in {
+    "validation": validation,
+    "test": training_table.loc[training_table.index >= test_start],
+}.items():
+    comparison = period[["mean", "yesterday"]].copy()
+    comparison["model"] = model.predict(period[features])
+    scores, schedules = evaluate_period(comparison)
+    report[name] = scores
+    schedules.to_csv(results_folder / f"{name}-scheduling.csv")
+    print(f"{name.upper()}: {scores['days']} days, {scores['hours']} hours; "
+          f"{scores['skipped_days']} skipped days {scores['skipped_dates']}")
+    print(f"Hourly MAE: baseline {scores['baseline_hourly_mae_kw']:.3f}, "
+          f"model {scores['model_hourly_mae_kw']:.3f} kW")
+    print(f"Daily peak MAE: baseline {scores['baseline_peak_mae_kw']:.3f}, "
+          f"model {scores['model_peak_mae_kw']:.3f} kW")
+    print("Average simulated daily peaks (kW):")
+    print(schedules.mean().round(3))
+    for reference in ["Original", "Baseline"]:
+        reduction = (schedules[reference] - schedules["Model"]).round(9)
+        outcomes = {
+            "better": int((reduction > 0).sum()),
+            "equal": int((reduction == 0).sum()),
+            "worse": int((reduction < 0).sum()),
+        }
+        scores[f"model_vs_{reference.lower()}"] = outcomes
+        print(f"Model vs {reference}: {outcomes}")
+    scores["average_simulated_peak_kw"] = schedules.mean().to_dict()
+    if name == "validation":
+        validation_comparison = comparison
 
-print(f"Baseline MAE: {baseline_mae:.3f} kW")
-print(f"Decision tree MAE: {model_mae:.3f} kW")
-
-comparison = validation[["mean", "yesterday"]].copy()
-
-comparison["model"] = predictions
-
-daily_peaks = comparison.resample("D").max()
-
-baseline_peak_mae = (
-    daily_peaks["mean"] - daily_peaks["yesterday"]
-).abs().mean()
-
-model_peak_mae = (
-    daily_peaks["mean"] - daily_peaks["model"]
-).abs().mean()
-
-print(f"Baseline daily peak MAE: {baseline_peak_mae:.3f} kW")
-print(f"Model daily peak MAE: {model_peak_mae:.3f} kW")
+report["model"] = {"meter_id": METER_ID, "criterion": "absolute_error", "max_depth": 5, "random_state": 42}
+report["validation_start"] = str(validation_start)
+report["test_start"] = str(test_start)
+(results_folder / "evaluation.json").write_text(json.dumps(report, indent=2) + "\n")
+comparison = validation_comparison
 
 # Use the first validation day, chosen before inspecting scheduling results.
 day = comparison.loc[str(validation_start.date())]
