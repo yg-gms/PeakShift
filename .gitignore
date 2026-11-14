@@ -4,3 +4,5 @@
 __pycache__/
 
 /data/plans.sqlite3*
+
+/_site/

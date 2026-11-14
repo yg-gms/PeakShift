@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#276955"><meta name="description" content="Plan and track your household appliance use throughout the day.">
+<title>PeakShift — Your appliance plan</title>
+<link rel="stylesheet" href="style.css">
+<script defer src="https://cdn.jsdelivr.net/pyodide/v314.0.8/full/pyodide.js"></script>
+<script defer src="app.js"></script>
+</head>
+<body>
+<header><a class="brand" href="./">PeakShift<span>Household planner</span></a><span class="save-note">Plans stay in this browser</span></header>
+<main>
+<div class="intro"><h1>Plan your appliance use.</h1><p>Add what you need to run. Find a schedule that spreads out demand.</p></div>
+<p id="message" role="status">Preparing your planner…</p>
+<nav aria-label="Views"><button data-tab="planner" aria-current="page">Your day</button><button data-tab="household">Household data</button><button data-tab="evidence">What the tests showed</button></nav>
+<section id="planner">
+<div class="date-row"><label>Plan for<input id="date" type="date" required></label><p>Demand estimates use a sample Swiss household.<br>All times follow Europe/Zurich.</p></div>
+<div class="layout">
+<form id="add-form" class="panel"><h2>Add an appliance</h2>
+<label>Appliance<select id="appliance" required></select></label><p id="preset" class="muted"></p>
+<label>Run time (minutes)<input id="duration" type="number" min="1" max="1440" step="1" required></label>
+<div class="pair"><label>Available from<select id="earliest"></select></label><label>Finish by<select id="deadline"></select></label></div>
+<label>Run after<select id="after"><option value="">Any time in my window</option></select></label>
+<details><summary>Adjust energy estimate</summary><label>Energy for this run (kWh)<input id="energy" type="number" min="0.001" max="100" step="any" required></label><p class="muted">Use your appliance label or manual when available. Actual energy varies with the programme and load.</p></details>
+<button id="add" class="primary" type="submit" disabled>Add to day</button><p class="muted small">Adding a run updates pending start times. Running and completed tasks keep their times.</p>
+</form>
+<div class="plan"><div class="section-top"><h2 id="plan-title">Your day</h2><button id="replan" disabled>Replan pending</button></div>
+<div id="totals" class="totals"></div><div id="tasks"></div>
+<button id="download" hidden>Download day plan</button>
+<details id="day-chart" hidden><summary>See demand across your day</summary><p class="muted">Typical household demand and the additional loads in your plan.</p><canvas id="plan-canvas" role="img" aria-label="Typical household demand compared with demand including scheduled appliances"></canvas><p class="legend"><span>Typical household</span><span>With your plan</span></p><p class="muted small">Estimates use average run power. The sample household may already include appliance use.</p></details>
+</div></div>
+</section>
+<section id="household" hidden><h2>Recorded household demand</h2><label class="compact">Recorded day<select id="recorded-date"></select></label><div id="recorded-totals" class="totals"></div><canvas id="recorded-canvas" role="img" aria-label="Recorded hourly demand for the selected household day"></canvas><p class="muted">Actual hourly averages, Swiss household, 2023–2024. Kaiser et al., CC BY 4.0.</p><a href="https://zenodo.org/records/21398769">Household dataset and credit</a><details><summary>View hourly readings</summary><div id="readings-table"></div></details><details><summary>Appliance estimates</summary><div id="presets-table"></div><a id="appliance-source">Appliance energy reference — Power NI</a><p class="muted small">Editable example runs. Cooking, kettle, and vacuum estimates use reference power multiplied by the example run time.</p></details></section>
+<section id="evidence" hidden><h2>Recorded test results</h2><p class="muted">Historical benchmark for the original decision-tree scheduler. The current daily planner has not received a new held-out evaluation.</p><p class="notice">The final test showed slightly lower hourly error, worse daily peak error, and a scheduling tie with the yesterday baseline on all 109 days.</p><div id="scores"></div></section>
+</main><footer>PeakShift · Plan times and energy are estimates. Completion is self-reported.</footer>
+<noscript>This planner needs JavaScript enabled in your browser.</noscript>
+</body></html>

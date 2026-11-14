@@ -4,6 +4,14 @@ Plan and track appliance use throughout a day. Choose an appliance, run time, an
 
 Demand estimates use one Swiss household. Presets are editable estimates. All plan times follow Europe/Zurich. The app has **Your day**, **Household data**, and **What the tests showed** tabs.
 
+## GitHub Pages version
+
+The browser version uses the same Python daily scheduler through Pyodide, with plans saved in each visitor's browser. It exports the sample household data during the build. GitHub Actions builds and publishes it from `main` once Pages is enabled. The local Streamlit app remains available below.
+
+Build the static site locally with `python build_site.py`. Generated files go into the ignored `_site/` folder. No saved SQLite plans are exported. The first browser visit downloads the Python runtime.
+
+See [the code and model guide](docs/CODE_GUIDE.md) for each file's role, both forecasting methods, scheduling, storage, and next steps.
+
 ## Run the app
 
 Use Python 3.11. From the project folder:
