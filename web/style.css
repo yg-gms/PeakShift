@@ -1,275 +1,348 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;
-500;
-600;
-700&display=swap');
-:root{
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+:root {
   font-family:'DM Sans',sans-serif;
   color:#20362d;
   background:#f5f7f3;
   font-synthesis:none;
   line-height:1.5;
   --green:#276955;
-  --border:#d7e0d8}
-  *{
-    box-sizing:border-box}
-    body{
-      margin:0}
-      header,main,footer{
-        max-width:1160px;
-        margin:auto;
-        padding:24px}
-        header{
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          border-bottom:1px solid var(--border)}
-          .brand{
-            text-decoration:none;
-            font-weight:700;
-            font-size:24px;
-            color:var(--green)}
-            .brand span{
-              display:block;
-              font-size:12px;
-              font-weight:400;
-              color:#67766d}
-              .save-note,.muted,.date-row p{
-                color:#65746a}
-                .save-note,.small{
-                  font-size:13px}
-                  .intro{
-                    padding:28px 0 12px}
-                    .eyebrow{
-                      color:var(--green);
-                      font-size:14px}
-                      h1{
-                        font-size:clamp(32px,5vw,48px);
-                        line-height:1.1;
-                        margin:12px 0}
-                        h2{
-                          font-size:22px;
-                          margin:0 0 20px}
-                          h3{
-                            margin:0;
-                            font-size:18px}
-                            nav{
-                              display:flex;
-                              gap:8px;
-                              border-bottom:1px solid var(--border);
-                              margin:20px 0 28px;
-                              padding-bottom:12px;
-                              flex-wrap:wrap}
-                              button,input,select{
-                                font:inherit}
-                                button{
-                                  border:1px solid var(--border);
-                                  border-radius:8px;
-                                  background:#fff;
-                                  color:#274d3c;
-                                  padding:10px 16px;
-                                  cursor:pointer}
-                                  button:hover{
-                                    background:#edf3ec}
-                                    button:disabled{
-                                      opacity:.45;
-                                      cursor:default}
-                                      nav button{
-                                        border-color:transparent;
-                                        background:none}
-                                        nav button[aria-current]{
-                                          background:#e0ece2;
-                                          color:#20533f;
-                                          font-weight:600}
-                                          .primary{
-                                            background:var(--green);
-                                            color:#fff;
-                                            width:100%;
-                                            margin-top:20px}
-                                            .primary:hover{
-                                              background:#205643}
-                                              input,select{
-                                                width:100%;
-                                                border:1px solid #bfcec2;
-                                                border-radius:7px;
-                                                padding:10px;
-                                                background:#fff;
-                                                color:#20362d;
-                                                min-width:0}
-                                                label{
-                                                  display:block;
-                                                  font-size:14px;
-                                                  margin:0 0 18px}
-                                                  label input,label select{
-                                                    display:block;
-                                                    margin-top:7px}
-                                                    button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{
-                                                      outline:3px solid #d2a44c;
-                                                      outline-offset:3px}
-                                                      .date-row{
-                                                        display:flex;
-                                                        align-items:center;
-                                                        gap:32px;
-                                                        margin-bottom:20px}
-                                                        .date-row label{
-                                                          width:240px;
-                                                          margin:0}
-                                                          .date-row p{
-                                                            font-size:13px}
-                                                            .layout{
-                                                              display:grid;
-                                                              grid-template-columns:340px 1fr;
-                                                              gap:36px;
-                                                              align-items:start}
-                                                              .panel,.task{
-                                                                background:#fff;
-                                                                border:1px solid var(--border);
-                                                                border-radius:12px;
-                                                                padding:24px}
-                                                                .pair{
-                                                                  display:grid;
-                                                                  grid-template-columns:1fr 1fr;
-                                                                  gap:14px}
-                                                                  .section-top{
-                                                                    display:flex;
-                                                                    justify-content:space-between;
-                                                                    gap:12px;
-                                                                    align-items:start}
-                                                                    .section-top button{
-                                                                      font-size:13px}
-                                                                      .totals{
-                                                                        display:flex;
-                                                                        gap:32px;
-                                                                        margin:0 0 20px;
-                                                                        padding:18px 0;
-                                                                        border-bottom:1px solid var(--border)}
-                                                                        .totals strong{
-                                                                          display:block;
-                                                                          font-size:26px}
-                                                                          .totals span{
-                                                                            font-size:13px;
-                                                                            color:#65746a}
-                                                                            .task{
-                                                                              margin-bottom:14px}
-                                                                              .task-top{
-                                                                                display:flex;
-                                                                                justify-content:space-between;
-                                                                                gap:16px}
-                                                                                .status{
-                                                                                  font-size:12px;
-                                                                                  border-radius:20px;
-                                                                                  background:#edf2ec;
-                                                                                  padding:4px 10px;
-                                                                                  white-space:nowrap}
-                                                                                  .status.done{
-                                                                                    background:#dcebdc;
-                                                                                    color:#315f34}
-                                                                                    .task-time{
-                                                                                      font-size:28px;
-                                                                                      letter-spacing:-1px;
-                                                                                      margin:10px 0}
-                                                                                      .actions{
-                                                                                        display:flex;
-                                                                                        gap:8px;
-                                                                                        flex-wrap:wrap;
-                                                                                        margin-top:14px}
-                                                                                        .actions button{
-                                                                                          font-size:13px;
-                                                                                          padding:7px 12px}
-                                                                                          .actions button:last-child{
-                                                                                            margin-left:auto;
-                                                                                            color:#7f4b3d}
-                                                                                            .task p{
-                                                                                              margin:6px 0}
-                                                                                              .notice,#message.error{
-                                                                                                background:#fff1d6;
-                                                                                                padding:14px;
-                                                                                                border-radius:8px}
-                                                                                                .empty{
-                                                                                                  border:1px dashed #b8cabb;
-                                                                                                  border-radius:12px;
-                                                                                                  padding:40px 24px;
-                                                                                                  color:#65746a}
-                                                                                                  details{
-                                                                                                    margin:18px 0;
-                                                                                                    border-top:1px solid var(--border);
-                                                                                                    padding-top:14px}
-                                                                                                    summary{
-                                                                                                      cursor:pointer;
-                                                                                                      color:var(--green);
-                                                                                                      margin-bottom:12px}
-                                                                                                      canvas{
-                                                                                                        width:100%;
-                                                                                                        height:260px;
-                                                                                                        display:block;
-                                                                                                        background:#fff;
-                                                                                                        border-radius:10px}
-                                                                                                        .legend{
-                                                                                                          display:flex;
-                                                                                                          gap:20px;
-                                                                                                          font-size:12px;
-                                                                                                          color:#65746a}
-                                                                                                          .legend span:before{
-                                                                                                            content:' ';
-                                                                                                            display:inline-block;
-                                                                                                            width:18px;
-                                                                                                            height:3px;
-                                                                                                            background:#9aa99d;
-                                                                                                            margin-right:7px;
-                                                                                                            vertical-align:middle}
-                                                                                                            .legend span+span:before{
-                                                                                                              background:var(--green)}
-                                                                                                              table{
-                                                                                                                border-collapse:collapse;
-                                                                                                                width:100%;
-                                                                                                                font-size:14px;
-                                                                                                                margin:18px 0}
-                                                                                                                th,td{
-                                                                                                                  padding:10px;
-                                                                                                                  text-align:left;
-                                                                                                                  border-bottom:1px solid var(--border)}
-                                                                                                                  th{
-                                                                                                                    font-weight:600}
-                                                                                                                    .table-wrap{
-                                                                                                                      overflow:auto}
-                                                                                                                      .compact{
-                                                                                                                        max-width:280px}
-                                                                                                                        a{
-                                                                                                                          color:var(--green)}
-                                                                                                                          footer{
-                                                                                                                            font-size:12px;
-                                                                                                                            color:#65746a;
-                                                                                                                            margin-top:36px;
-                                                                                                                            border-top:1px solid var(--border)}
-                                                                                                                            #message:empty{
-                                                                                                                              display:none}
-                                                                                                                              [hidden]{
-                                                                                                                                display:none!important}
-                                                                                                                                @media(max-width:760px){
-                                                                                                                                  header,main,footer{
-                                                                                                                                    padding:18px}
-                                                                                                                                    .layout{
-                                                                                                                                      grid-template-columns:1fr;
-                                                                                                                                      gap:28px}
-                                                                                                                                      .intro{
-                                                                                                                                        padding-top:12px}
-                                                                                                                                        .date-row{
-                                                                                                                                          gap:20px}
-                                                                                                                                          .date-row label{
-                                                                                                                                            width:50%}
-                                                                                                                                            .date-row p{
-                                                                                                                                              width:50%}
-                                                                                                                                              .save-note{
-                                                                                                                                                max-width:110px;
-                                                                                                                                                text-align:right}
-                                                                                                                                                .panel,.task{
-                                                                                                                                                  padding:18px}
-                                                                                                                                                  .section-top h2{
-                                                                                                                                                    font-size:20px}
-                                                                                                                                                    th,td{
-                                                                                                                                                      padding:8px}
-                                                                                                                                                      nav{
-                                                                                                                                                        gap:0}
-                                                                                                                                                        nav button{
-                                                                                                                                                          font-size:13px;
-                                                                                                                                                          padding:8px 10px}
-                                                                                                                                                        }
+  --border:#d7e0d8
+}
+* {
+  box-sizing:border-box
+}
+body {
+  margin:0
+}
+header,main,footer {
+  max-width:1160px;
+  margin:auto;
+  padding:24px
+}
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border)
+}
+.brand {
+  text-decoration:none;
+  font-weight:700;
+  font-size:24px;
+  color:var(--green)
+}
+.brand span {
+  display:block;
+  font-size:12px;
+  font-weight:400;
+  color:#67766d
+}
+.save-note,.muted,.date-row p {
+  color:#65746a
+}
+.save-note,.small {
+  font-size:13px
+}
+.intro {
+  padding:28px 0 12px
+}
+.eyebrow {
+  color:var(--green);
+  font-size:14px
+}
+h1 {
+  font-size:clamp(32px,5vw,48px);
+  line-height:1.1;
+  margin:12px 0
+}
+h2 {
+  font-size:22px;
+  margin:0 0 20px
+}
+h3 {
+  margin:0;
+  font-size:18px
+}
+nav {
+  display:flex;
+  gap:8px;
+  border-bottom:1px solid var(--border);
+  margin:20px 0 28px;
+  padding-bottom:12px;
+  flex-wrap:wrap
+}
+button,input,select {
+  font:inherit
+}
+button {
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#fff;
+  color:#274d3c;
+  padding:10px 16px;
+  cursor:pointer
+}
+button:hover {
+  background:#edf3ec
+}
+button:disabled {
+  opacity:.45;
+  cursor:default
+}
+nav button {
+  border-color:transparent;
+  background:none
+}
+nav button[aria-current] {
+  background:#e0ece2;
+  color:#20533f;
+  font-weight:600
+}
+.primary {
+  background:var(--green);
+  color:#fff;
+  width:100%;
+  margin-top:20px
+}
+.primary:hover {
+  background:#205643
+}
+input,select {
+  width:100%;
+  border:1px solid #bfcec2;
+  border-radius:7px;
+  padding:10px;
+  background:#fff;
+  color:#20362d;
+  min-width:0
+}
+label {
+  display:block;
+  font-size:14px;
+  margin:0 0 18px
+}
+label input,label select {
+  display:block;
+  margin-top:7px
+}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible {
+  outline:3px solid #d2a44c;
+  outline-offset:3px
+}
+.date-row {
+  display:flex;
+  align-items:center;
+  gap:32px;
+  margin-bottom:20px
+}
+.date-row label {
+  width:240px;
+  margin:0
+}
+.date-row p {
+  font-size:13px
+}
+.layout {
+  display:grid;
+  grid-template-columns:340px 1fr;
+  gap:36px;
+  align-items:start
+}
+.panel,.task {
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px
+}
+.pair {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px
+}
+.section-top {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:start
+}
+.section-top button {
+  font-size:13px
+}
+.totals {
+  display:flex;
+  gap:32px;
+  margin:0 0 20px;
+  padding:18px 0;
+  border-bottom:1px solid var(--border)
+}
+.totals strong {
+  display:block;
+  font-size:26px
+}
+.totals span {
+  font-size:13px;
+  color:#65746a
+}
+.task {
+  margin-bottom:14px
+}
+.task-top {
+  display:flex;
+  justify-content:space-between;
+  gap:16px
+}
+.status {
+  font-size:12px;
+  border-radius:20px;
+  background:#edf2ec;
+  padding:4px 10px;
+  white-space:nowrap
+}
+.status.done {
+  background:#dcebdc;
+  color:#315f34
+}
+.task-time {
+  font-size:28px;
+  letter-spacing:-1px;
+  margin:10px 0
+}
+.actions {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px
+}
+.actions button {
+  font-size:13px;
+  padding:7px 12px
+}
+.actions button:last-child {
+  margin-left:auto;
+  color:#7f4b3d
+}
+.task p {
+  margin:6px 0
+}
+.notice,#message.error {
+  background:#fff1d6;
+  padding:14px;
+  border-radius:8px
+}
+.empty {
+  border:1px dashed #b8cabb;
+  border-radius:12px;
+  padding:40px 24px;
+  color:#65746a
+}
+details {
+  margin:18px 0;
+  border-top:1px solid var(--border);
+  padding-top:14px
+}
+summary {
+  cursor:pointer;
+  color:var(--green);
+  margin-bottom:12px
+}
+canvas {
+  width:100%;
+  height:260px;
+  display:block;
+  background:#fff;
+  border-radius:10px
+}
+.legend {
+  display:flex;
+  gap:20px;
+  font-size:12px;
+  color:#65746a
+}
+.legend span:before {
+  content:' ';
+  display:inline-block;
+  width:18px;
+  height:3px;
+  background:#9aa99d;
+  margin-right:7px;
+  vertical-align:middle
+}
+.legend span+span:before {
+  background:var(--green)
+}
+table {
+  border-collapse:collapse;
+  width:100%;
+  font-size:14px;
+  margin:18px 0
+}
+th,td {
+  padding:10px;
+  text-align:left;
+  border-bottom:1px solid var(--border)
+}
+th {
+  font-weight:600
+}
+.table-wrap {
+  overflow:auto
+}
+.compact {
+  max-width:280px
+}
+a {
+  color:var(--green)
+}
+footer {
+  font-size:12px;
+  color:#65746a;
+  margin-top:36px;
+  border-top:1px solid var(--border)
+}
+#message:empty {
+  display:none
+}
+[hidden] {
+  display:none!important
+}
+@media(max-width:760px) {
+  header,main,footer {
+    padding:18px
+  }
+  .layout {
+    grid-template-columns:1fr;
+    gap:28px
+  }
+  .intro {
+    padding-top:12px
+  }
+  .date-row {
+    gap:20px
+  }
+  .date-row label {
+    width:50%
+  }
+  .date-row p {
+    width:50%
+  }
+  .save-note {
+    max-width:110px;
+    text-align:right
+  }
+  .panel,.task {
+    padding:18px
+  }
+  .section-top h2 {
+    font-size:20px
+  }
+  th,td {
+    padding:8px
+  }
+  nav {
+    gap:0
+  }
+  nav button {
+    font-size:13px;
+    padding:8px 10px
+  }
+}
