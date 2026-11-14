@@ -1,4 +1,5 @@
 """Export the public sample data and build the GitHub Pages app."""
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -29,5 +30,11 @@ if __name__ == "__main__":
     }
     (output / "data.json").write_text(json.dumps(data, separators=(",", ":"), allow_nan=False))
     shutil.copyfile(ROOT / "daily_planner.py", output / "daily_planner.py")
+    # Version assets so a new deployment replaces cached styles and controls.
+    index = (output / "index.html").read_text()
+    for asset in ["style.css", "app.js"]:
+        version = hashlib.sha256((output / asset).read_bytes()).hexdigest()[:12]
+        index = index.replace(f'"{asset}"', f'"{asset}?v={version}"')
+    (output / "index.html").write_text(index)
     (output / ".nojekyll").touch()
     print(f"Built {output} with {len(days)} complete recorded days.")
