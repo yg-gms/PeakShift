@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-DATA_FOLDER = Path(__file__).resolve().parent / "data/raw/swiss"
+DATA_FILE = Path(__file__).resolve().parent / "data/household.csv.gz"
 METER_ID = 133930
 
 
@@ -31,7 +31,7 @@ def load_hourly(path):
 
 
 if __name__ == "__main__":
-    hourly = load_hourly(DATA_FOLDER / "smart_meter_data" / f"{METER_ID}.csv")
+    hourly = load_hourly(DATA_FILE)
 
     print("Swiss household meter:", METER_ID)
     print("First hour:", hourly.index.min())
