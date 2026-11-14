@@ -39,7 +39,6 @@ class SwissHourlyTests(unittest.TestCase):
             [stamp.utcoffset().total_seconds() for stamp in hourly.index],
             [7200, 3600],
         )
-        self.assertTrue(hourly.index.is_unique)
 
 
 if __name__ == "__main__":

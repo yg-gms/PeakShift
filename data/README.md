@@ -36,7 +36,7 @@ The original UCI household file remains at `raw/household_power_consumption.txt`
 
 ## Run and verify
 
-From the PeakShift folder, activate `.venv`, then run `python explore.py`.
+From the PeakShift folder, activate `.venv`. Run `python explore.py` to inspect the data, or `python train.py` to train the model, compare it with the baseline, and run the one-hour scheduling example.
 Run conversion and missing-data checks with `python -B -m unittest discover -s tests -v`.
 
-No forecasting model has been trained. Tariff data is retained for provenance and possible later analysis; the exploration script does not use it.
+The current model is a decision tree evaluated on validation dates. The final test dates remain reserved. The scheduling example adds an assumed 1 kW, one-hour task to the first validation day; it does not control an appliance. Tariff data is retained but is not used by the current code.
