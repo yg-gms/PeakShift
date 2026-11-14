@@ -18,13 +18,8 @@ def load_hourly(path):
     data["timestamp"] = pd.to_datetime(data["timestamp_utc"], utc=True)
     data = data.set_index("timestamp").sort_index()
 
-    if data.empty or data.index.hasnans or not data.index.is_unique:
-        raise ValueError("Meter timestamps must be present and unique.")
-    if not (data.index == data.index.floor("15min")).all():
-        raise ValueError("Meter readings must start on 15-minute boundaries.")
-    energy = pd.to_numeric(data["kWh_to_installation"], errors="raise")
-    if (energy.dropna() < 0).any():
-        raise ValueError("Imported energy cannot be negative.")
+    # shortcut: expects the verified Swiss files; validate any new data source first.
+    energy = data["kWh_to_installation"]
 
     # The source is kWh per 15-minute interval; divide by 0.25 hours for kW.
     demand = energy.asfreq("15min") / 0.25

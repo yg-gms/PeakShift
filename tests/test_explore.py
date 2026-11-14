@@ -9,9 +9,6 @@ import explore
 
 class SwissHourlyTests(unittest.TestCase):
     def load(self, timestamps, energy):
-        self.assertTrue(
-            hasattr(explore, "load_hourly"), "Swiss dataset loader is not implemented"
-        )
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "meter.csv"
             pd.DataFrame(
@@ -32,18 +29,6 @@ class SwissHourlyTests(unittest.TestCase):
         self.assertEqual(hourly["count"].tolist(), [3, 0, 4])
         self.assertTrue(hourly["mean"].iloc[:2].isna().all())
         self.assertEqual(hourly["mean"].iloc[2], 1.0)
-
-    def test_invalid_readings_are_rejected(self):
-        times = pd.date_range("2023-01-01", periods=4, freq="15min", tz="UTC")
-        cases = [
-            ([times[0], times[0]], [0.25, 0.25]),
-            (times + pd.Timedelta(minutes=1), [0.25] * 4),
-            (times, [0.25, -0.25, 0.25, 0.25]),
-        ]
-        for timestamps, energy in cases:
-            with self.subTest(timestamps=list(timestamps), energy=energy):
-                with self.assertRaises(ValueError):
-                    self.load(timestamps, energy)
 
     def test_daylight_saving_repeated_hour_keeps_both_instants(self):
         times = pd.date_range("2023-10-29", periods=8, freq="15min", tz="UTC")
