@@ -5,6 +5,7 @@ from scheduler import choose_start
 
 def evaluate_period(comparison):
     counts = comparison.resample("D").count()
+    # Score only days with all 24 actual, baseline, and model readings.
     complete_days = counts.index[(counts == 24).all(axis=1)]
     readings = comparison.loc[comparison.index.normalize().isin(complete_days)]
     assert not readings.empty, "No complete 24-hour days to evaluate."
@@ -30,6 +31,7 @@ def evaluate_period(comparison):
         }
         result = {"date": date}
         for name, start in starts.items():
+            # Choose with forecasts above, but score against the measured background.
             actual = day["mean"].copy()
             actual.loc[start] += 1.0
             result[name] = actual.max()

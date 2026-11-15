@@ -17,12 +17,14 @@ function profile() {
   if (!data.profiles[weekday]) throw new Error('Choose a valid planning date.');
   return data.profiles[weekday];
 }
+// Send task data as JSON to the same Python scheduler used by the local app.
 function compute(list, mode) {
   const now = swissNow();
   python.globals.set('request_json', JSON.stringify({profile:profile(), tasks:list, mode, not_before:$('date').value === now.date ? now.minute + 1 : 0}));
   return JSON.parse(python.runPython(`
 request = json.loads(request_json)
 planned, curve = plan_day(request['profile'], request['tasks'], request['not_before'])
+# Rebuild the displayed curve from saved starts without moving tasks.
 if request['mode'] == 'view':
     planned = request['tasks']
     curve = [float(value) for value in request['profile'] for _ in range(60)]
@@ -35,6 +37,7 @@ json.dumps({'tasks': planned, 'load': curve}, allow_nan=False)
 function persist(list, replan = false) {
   const result = compute(list, replan ? 'plan' : 'view');
   const key = 'peakshift.day.' + $('date').value;
+  // Refuse to overwrite a plan that another tab has changed since we loaded it.
   if (localStorage.getItem(key) !== savedRaw) throw new Error('This day changed in another tab. Select the date again to reload it.');
   const raw = JSON.stringify(result.tasks);
   localStorage.setItem(key, raw);
@@ -141,6 +144,7 @@ async function initialize() {
     $('appliance-source').href = data.appliance_source;
     $('presets-table').innerHTML = table(['Appliance','Example minutes','Estimated kWh'], Object.entries(data.appliances).map(([name,p]) => [name,p.minutes,p.kwh]));
     preset(); showReadings(); showEvidence();
+    // Pyodide runs the shared Python planner directly in the browser.
     python = await loadPyodide();
     python.FS.writeFile('daily_planner.py', await sourceResponse.text());
     python.runPython('import json\nfrom daily_planner import plan_day, add_task_load');

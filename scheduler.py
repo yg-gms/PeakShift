@@ -13,6 +13,7 @@ def choose_start(forecast, power_kw=1.0, earliest=18, deadline=22):
 
     peaks = {}
     starts = forecast.index[(forecast.index.hour >= earliest) & (forecast.index.hour < deadline)]
+    # Try each allowed hour and compare the whole-day peak after adding the task.
     for start in starts.sort_values():
         combined = forecast.copy()
         combined.loc[start] += power_kw

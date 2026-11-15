@@ -1,18 +1,16 @@
 # PeakShift
 
-Plan and track appliance use throughout a day. Choose an appliance, run time, and allowed window. PeakShift schedules runs together and supports tasks such as drying after washing. Plans and completion status are saved locally in `data/plans.sqlite3`.
+Plan and track appliance use throughout a day. Choose an appliance, run time, and allowed window. PeakShift schedules runs together and supports tasks such as drying after washing. Plans and completion status are saved in each visitor's browser.
 
 Demand estimates use one Swiss household. Presets are editable estimates. All plan times follow Europe/Zurich. The app has **Your day**, **Household data**, and **What the tests showed** tabs.
 
 ## GitHub Pages version
 
-The browser version uses the same Python daily scheduler through Pyodide, with plans saved in each visitor's browser. It exports the sample household data during the build. GitHub Actions builds and publishes it from `main` once Pages is enabled. The local Streamlit app remains available below.
+The website runs the Python daily scheduler through Pyodide, with plans saved in each visitor's browser. It exports the sample household data during the build. GitHub Actions builds and publishes it from `main` once Pages is enabled.
 
-Build the static site locally with `python build_site.py`. Generated files go into the ignored `_site/` folder. No saved SQLite plans are exported. The first browser visit downloads the Python runtime.
+Build the static site locally with `python build_site.py`. Generated files go into the ignored `_site/` folder. The first browser visit downloads the Python runtime.
 
-See [the code and model guide](docs/CODE_GUIDE.md) for each file's role, both forecasting methods, scheduling, storage, and next steps.
-
-## Run the app
+## Build and preview the website
 
 Use Python 3.11. From the project folder:
 
@@ -20,14 +18,15 @@ Use Python 3.11. From the project folder:
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-python -m streamlit run app.py
+python build_site.py
+python -m http.server 8000 --directory _site
 ```
 
-If `.venv` already exists, start at the activation command. The household used for the experiment is bundled as a 375 KB compressed CSV, so no external data download or API key is needed.
+Open http://localhost:8000 in your browser. If `.venv` already exists, start at the activation command. The household used for the experiment is bundled as a 375 KB compressed CSV, so no external data download or API key is needed.
 
-Select a planning date and add appliances. Use **Run after** to link tasks, **Start** and **Mark done** to track them, and **Replan pending appliances** to update remaining starts. Adding a run reschedules pending tasks. Running/completed tasks retain their times. A same-appliance run cannot overlap another run of that appliance. Tasks that cannot fit remain visibly unscheduled. Plans are shared by browser tabs on this local installation, and revision checks prevent stale tabs from overwriting a newer save. CSV exports include unscheduled tasks.
+Select a planning date and add appliances. Use **Run after** to link tasks, **Start** and **Mark done** to track them, and **Replan pending appliances** to update remaining starts. Adding a run reschedules pending tasks. Running/completed tasks retain their times. A same-appliance run cannot overlap another run of that appliance. Tasks that cannot fit remain visibly unscheduled. Plans are saved per browser and device. Clearing site data removes saved plans. CSV exports include unscheduled tasks.
 
-Appliance defaults and their assumptions are documented in [appliance notes](docs/APPLIANCE_PRESETS.md). The original test results remain available, including the weak final-test results. Those scores do not evaluate the new daily planner.
+Editable appliance defaults are in `appliances.py`, based on [Power NI's appliance guide](https://powerni.co.uk/help/energy-guides/which-appliances-use-the-most-electricity/). Durations are example runs; cooking, kettle, and vacuum energy estimates use reference power multiplied by run time. Actual consumption varies by programme, load, and model. The original test results remain available, including the weak final-test results. Those scores do not evaluate the new daily planner.
 
 ## Weekday planner
 
@@ -71,12 +70,12 @@ python explore.py
 
 | File | Responsibility |
 |---|---|
-| `app.py` | Task controls, recommendation, charts, and results |
+| `web/app.js` | Website controls, browser storage, charts, and connection to the Python planner |
+| `build_site.py` | Export sample data and build the static website |
 | `explore.py` | Load and convert the household readings |
 | `forecast.py` | Original decision-tree experiment and training-only weekday profiles |
 | `scheduler.py` | Original one-hour experiment scheduler |
 | `daily_planner.py` | Schedule variable-duration runs together |
-| `plan_store.py` | Save daily plans with revision checks |
 | `appliances.py` | Editable appliance energy and duration presets |
 | `evaluation.py` | Score forecasts and simulated scheduling decisions |
 | `train.py` | Run and save the experiment |
@@ -85,6 +84,4 @@ python explore.py
 
 [Dataset on residential electricity load profiles in Switzerland](https://zenodo.org/records/21398769), by Katharina Kaiser, Markus Kreft, Marina González Vayá, and Gabriela Hug. Version v1, DOI [10.5281/zenodo.21398769](https://doi.org/10.5281/zenodo.21398769), licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). [Description paper](https://arxiv.org/abs/2607.19294). The bundled file is the original meter 133930 CSV, gzip-compressed without changing its contents. See [data notes](data/README.md) for selection and units.
 
-Built with [pandas](https://pandas.pydata.org/), [scikit-learn](https://scikit-learn.org/), [Matplotlib](https://matplotlib.org/), and [Streamlit](https://streamlit.io/). OpenAI Codex/ChatGPT assisted with planning, code generation, debugging, tests, UI, and documentation. The student is reviewing and learning the implementation before submission. shadcn and pick-ui-library guidance was reviewed for UI choices; no React/shadcn packages were installed.
-
-See the [submission draft](docs/SUBMISSION.md) for the project write-up.
+Built with [pandas](https://pandas.pydata.org/), [scikit-learn](https://scikit-learn.org/), [Matplotlib](https://matplotlib.org/), and [Pyodide](https://pyodide.org/). OpenAI Codex/ChatGPT assisted with planning, code generation, debugging, tests, UI, and documentation. The student is reviewing and learning the implementation before submission. shadcn and pick-ui-library guidance was reviewed for UI choices; no React/shadcn packages were installed.
