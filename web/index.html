@@ -27,7 +27,7 @@
 <button id="add" class="primary" type="submit" disabled>Add to day</button><p class="muted small">Adding a run updates pending start times. Running and completed tasks keep their times.</p>
 </form>
 <div class="plan"><div class="section-top"><h2 id="plan-title">Your day</h2><button id="replan" disabled>Replan pending</button></div>
-<details id="day-chart" open hidden><summary>See demand across your day</summary><p class="muted">Historical weekday-average demand with hypothetical appliance runs added.</p><canvas id="plan-canvas" role="img" aria-label="Typical household demand compared with demand including scheduled appliances"></canvas><p class="legend"><span>Typical household</span><span>With your plan</span></p></details>
+<details id="day-chart" open hidden><summary>Compare demand across your day</summary><p class="muted">Earliest start versus your plan, on the same historical weekday-average demand. Both respect time windows, linked runs, and appliance availability. Running and completed tasks stay fixed; pending runs today start after the current Swiss time.</p><div id="comparison" aria-live="polite"></div><canvas id="plan-canvas" role="img" aria-label="Estimated demand: typical household, earliest feasible starts, and your plan"></canvas><p class="legend"><span>Typical household</span><span id="earliest-legend">Earliest start</span><span>Your plan</span></p></details>
 <div id="totals" class="totals"></div><div id="tasks"></div>
 <button id="download" hidden>Download day plan</button>
 </div></div>

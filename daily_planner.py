@@ -13,7 +13,7 @@ def add_task_load(load, task, start):
         load[minute] += power
 
 
-def plan_day(profile, tasks, not_before=0):
+def plan_day(profile, tasks, not_before=0, *, earliest_start=False):
     if len(profile) != 24 or any(not isfinite(v) or v < 0 for v in profile):
         raise ValueError("A complete, non-negative 24-hour demand profile is required.")
     if type(not_before) is not int or not 0 <= not_before <= 1440:
@@ -76,6 +76,9 @@ def plan_day(profile, tasks, not_before=0):
                    and start < other["start"] + other["minutes"]
                    and end > other["start"] for other in scheduled.values()):
                 continue
+            if earliest_start:
+                candidates.append(((start,), start))
+                break
             candidate = load.copy()
             add_task_load(candidate, task, start)
             # Prefer the lowest daily peak, then a smoother load, then an earlier start.

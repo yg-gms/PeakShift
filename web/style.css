@@ -267,7 +267,7 @@ canvas {
   margin-right:7px;
   vertical-align:middle
 }
-.legend span+span:before {
+.legend span:last-child:before {
   background:var(--green)
 }
 table {
@@ -346,3 +346,8 @@ footer {
     padding:8px 10px
   }
 }
+
+.legend {flex-wrap:wrap}
+.legend span:first-child:before {height:0;border-top:3px dotted #9aa99d;background:none}
+#earliest-legend:before {height:0;border-top:3px dashed #a96628;background:none}
+#comparison .totals {flex-wrap:wrap;gap:12px 28px}

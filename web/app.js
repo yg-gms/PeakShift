@@ -3,7 +3,7 @@ const $ = id => document.getElementById(id);
 const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clock = minute => `${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`;
 const table = (headings, rows) => `<div class="table-wrap"><table><thead><tr>${headings.map(h => `<th>${escapeHTML(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${row.map(v => `<td>${escapeHTML(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
-let data, python, tasks = [], savedRaw = null, dayLoad = [];
+let data, python, tasks = [], savedRaw = null, dayLoad = [], earliestLoad = [], comparisonComplete = false;
 function message(text = '', error = false) {
   $('message').textContent = text;
   $('message').className = error ? 'error' : '';
@@ -31,7 +31,9 @@ if request['mode'] == 'view':
     for task in planned:
         if task['start'] is not None:
             add_task_load(curve, task, task['start'])
-json.dumps({'tasks': planned, 'load': curve}, allow_nan=False)
+earliest, earliest_curve = plan_day(request['profile'], request['tasks'], request['not_before'], earliest_start=True)
+complete = all(task['start'] is not None for task in planned + earliest)
+json.dumps({'tasks': planned, 'load': curve, 'earliest_load': earliest_curve, 'comparison_complete': complete}, allow_nan=False)
 `));
 }
 function persist(list, replan = false) {
@@ -41,7 +43,7 @@ function persist(list, replan = false) {
   if (localStorage.getItem(key) !== savedRaw) throw new Error('This day changed in another tab. Select the date again to reload it.');
   const raw = JSON.stringify(result.tasks);
   localStorage.setItem(key, raw);
-  savedRaw = raw; tasks = result.tasks; dayLoad = result.load;
+  savedRaw = raw; tasks = result.tasks; dayLoad = result.load; earliestLoad = result.earliest_load; comparisonComplete = result.comparison_complete;
   render(); message();
 }
 function loadDay() {
@@ -50,7 +52,7 @@ function loadDay() {
     const saved = savedRaw === null ? [] : JSON.parse(savedRaw);
     if (!Array.isArray(saved)) throw new Error('Saved plan could not be read.');
     const result = compute(saved, 'view');
-    tasks = result.tasks; dayLoad = result.load;
+    tasks = result.tasks; dayLoad = result.load; earliestLoad = result.earliest_load; comparisonComplete = result.comparison_complete;
     render(); $('add').disabled = false; $('replan').disabled = false; message();
   } catch (error) {
     $('add').disabled = true; $('replan').disabled = true;
@@ -98,7 +100,7 @@ function chart(id, lines) {
   ctx.fillText('kW', 8, 13);
   [0,6,12,18,24].forEach(hour => ctx.fillText(`${String(hour).padStart(2,'0')}:00`, left + (right-left)*hour/24 - 12, height - 12));
   lines.forEach(line => {
-    ctx.strokeStyle = line.color; ctx.lineWidth = 2; ctx.beginPath();
+    ctx.strokeStyle = line.color; ctx.lineWidth = 2; ctx.setLineDash(line.dash || []); ctx.beginPath();
     line.values.forEach((value,i) => {
       const x = left + (right-left) * i / line.values.length;
       const y = bottom - (bottom-top) * value / max;
@@ -107,7 +109,17 @@ function chart(id, lines) {
   });
 }
 function drawPlan() {
-  if (data && dayLoad.length) chart('plan-canvas', [{values:profile().flatMap(v => Array(60).fill(v)),color:'#9aa99d'},{values:dayLoad,color:'#276955'}]);
+  if (!data || !dayLoad.length) return;
+  const earliestPeak = Math.max(...earliestLoad), planPeak = Math.max(...dayLoad);
+  const difference = earliestPeak - planPeak;
+  $('comparison').innerHTML = comparisonComplete
+    ? `<div class="totals"><div><strong>${earliestPeak.toFixed(2)} kW</strong><span>Earliest-start peak</span></div><div><strong>${planPeak.toFixed(2)} kW</strong><span>Your plan peak</span></div></div><p>${Math.abs(difference) < 0.005 ? 'Same estimated peak in both schedules.' : `Your plan has a ${Math.abs(difference).toFixed(2)} kW ${difference > 0 ? 'lower' : 'higher'} estimated peak.`} Same appliance energy; only timing changes.</p>`
+    : '<p class="notice">Peak comparison unavailable: at least one run has no time in one of the schedules. Resolve the time windows to compare the same complete set of runs.</p>';
+  $('earliest-legend').hidden = !comparisonComplete;
+  const lines = [{values:profile().flatMap(v => Array(60).fill(v)), color:'#9aa99d', dash:[2,4]}];
+  if (comparisonComplete) lines.push({values:earliestLoad, color:'#a96628', dash:[7,4]});
+  lines.push({values:dayLoad, color:'#276955'});
+  chart('plan-canvas', lines);
 }
 function showReadings() {
   const values = data.readings[$('recorded-date').value];
