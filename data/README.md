@@ -38,10 +38,12 @@ The original UCI household file remains locally at `data/raw/household_power_con
 
 ## Run and verify
 
-Follow the setup commands in `README.md`. Run `python -m streamlit run app.py` for the configurable one-hour task demo, `python explore.py` to inspect the bundled household, or `python train.py` to reproduce both evaluation periods.
+Follow the setup commands in `README.md`. Run `python build_site.py` and `python -m http.server 8000 --directory _site` to preview the website. JavaScript connects the interface to the Python daily scheduler through Pyodide in the browser. The build exports training-period weekday/hour averages; the deployed planner does not run decision-tree predictions. Run `python explore.py` to inspect the bundled household or `python train.py` to reproduce the separate decision-tree benchmark.
 
 The first week (1–7 January 2023) supplies lag history, not training targets. The 168-hour lag leaves those initial rows without complete inputs, so they are dropped before fitting. Training targets begin on 8 January 2023 and end on 25 May 2024. The current model is a decision tree evaluated on validation dates and a separate final period. The final evaluation has now been run with unchanged model settings; results are in `results/evaluation.json` and `results/test-scheduling.csv`. One 25-hour clock-change day was excluded from both forecast and scheduling comparisons. Final hourly MAE improved slightly, daily peak MAE worsened, and model scheduling tied the baseline scheduler on all evaluated final-test days. These limitations must be reported. The benchmark adds an assumed 1 kW, one-hour task on each eligible day; it does not control an appliance. Tariff data is retained but is not used by the current code.
 
-## Local plans
+## Browser plans and simulation limits
 
-`data/plans.sqlite3` stores this local installation's appliance plans and status. It is ignored by Git and separate from the bundled dataset.
+The current website saves appliance plans and status in browser local storage, not SQLite. Plans are separate from the bundled dataset and do not sync between browsers or devices. Clearing site data removes them.
+
+Treat the output as a scheduling simulation, not a precise forecast for a particular home. Neither the planner nor the benchmark establishes reductions in electricity costs, consumption, or emissions; these require further data and measurements.

@@ -2,7 +2,7 @@
 
 Plan and track appliance use throughout a day. Choose an appliance, run time, and allowed window. PeakShift schedules runs together and supports tasks such as drying after washing. Plans and completion status are saved in each visitor's browser.
 
-Demand estimates use one Swiss household. Presets are editable estimates. All plan times follow Europe/Zurich. The app has **Your day**, **Household data**, and **What the tests showed** tabs.
+The live planner uses historical weekday/hour averages from one Swiss household, not the trained decision tree. It is a scheduling simulation, not a precise forecast for your home. Presets are editable estimates. All plan times follow Europe/Zurich. The app has **Your day**, **Household data**, and **What the tests showed** tabs.
 
 ## GitHub Pages version
 
@@ -32,7 +32,7 @@ Editable appliance defaults are in `appliances.py`, based on [Power NI's applian
 
 For every weekday and hour, average available readings from 1 January 2023–25 May 2024, the original training dates. For example, Monday at 18:00 uses past Mondays at 18:00. The planner uses no validation or final-test dates to fit these averages. Each weekday has a 24-hour profile.
 
-The daily planner tries quarter-hour starts for each run, prioritizing narrower windows. It includes already-placed loads and dependencies. It chooses a lower daily peak, then a lower sum of squared demand across the day to spread overlapping loads, then an earlier start. This greedy procedure does not guarantee a globally optimal plan. Runs use constant estimated average power; the hourly background is held constant within each hour. Total task energy is conserved. Existing appliance loads may already be present in the historical household background. A larger peak elsewhere in the day can leave every candidate's daily peak equal. Averages smooth out unusual appliance use and seasons. A recommendation for a specific future date needs recent household data and further evaluation.
+The daily planner tries quarter-hour starts for each run, prioritizing narrower windows. It includes already-placed loads and dependencies. It chooses a lower daily peak, then a lower sum of squared demand across the day to spread overlapping loads, then an earlier start. This greedy procedure does not guarantee a globally optimal plan. A larger peak elsewhere in the day can leave every candidate's daily peak equal. A recommendation for a specific future date needs recent household data and further evaluation.
 
 ## Original experiment
 
