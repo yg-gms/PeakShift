@@ -27,9 +27,9 @@
 <button id="add" class="primary" type="submit" disabled>Add to day</button><p class="muted small">Adding a run updates pending start times. Running and completed tasks keep their times.</p>
 </form>
 <div class="plan"><div class="section-top"><h2 id="plan-title">Your day</h2><button id="replan" disabled>Replan pending</button></div>
+<details id="day-chart" open hidden><summary>See demand across your day</summary><p class="muted">Historical weekday-average demand with hypothetical appliance runs added.</p><canvas id="plan-canvas" role="img" aria-label="Typical household demand compared with demand including scheduled appliances"></canvas><p class="legend"><span>Typical household</span><span>With your plan</span></p></details>
 <div id="totals" class="totals"></div><div id="tasks"></div>
 <button id="download" hidden>Download day plan</button>
-<details id="day-chart" hidden><summary>See demand across your day</summary><p class="muted">Historical weekday-average demand with hypothetical appliance runs added.</p><canvas id="plan-canvas" role="img" aria-label="Typical household demand compared with demand including scheduled appliances"></canvas><p class="legend"><span>Typical household</span><span>With your plan</span></p></details>
 </div></div>
 </section>
 <section id="household" hidden><h2>Recorded household demand</h2><label class="compact">Recorded day<select id="recorded-date"></select></label><div id="recorded-totals" class="totals"></div><canvas id="recorded-canvas" role="img" aria-label="Recorded hourly demand for the selected household day"></canvas><p class="muted">Actual hourly averages, Swiss household, 2023–2024. Kaiser et al., CC BY 4.0.</p><a href="https://zenodo.org/records/21398769">Household dataset and credit</a><details><summary>View hourly readings</summary><div id="readings-table"></div></details><details><summary>Appliance estimates</summary><div id="presets-table"></div><a id="appliance-source">Appliance energy reference — Power NI</a><p class="muted small">Editable example runs. Cooking, kettle, and vacuum estimates use reference power multiplied by the example run time.</p></details></section>
